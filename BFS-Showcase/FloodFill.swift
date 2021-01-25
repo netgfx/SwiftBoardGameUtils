@@ -9,29 +9,22 @@ import Foundation
 
 class FloodFill {
     
-    var visited:Array<Array<Int>> = [
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0]
-    ]
-    
-    var map2D = [
-        [1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 0, 0, 0, 1, 0, 0, 1],
-        [1, 0, 0, 0, 1, 0, 0, 1],
-        [1, 0, 0, 0, 1, 0, 0, 1],
-        [1, 0, 0, 0, 1, 1, 1, 1],
-        [1, 1, 1, 1, 1, 0, 0, 1],
-        [1, 0, 0, 0, 1, 0, 0, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1]
-    ]
-    
     var stepCounter:Int = 0
+    var map:Array<Int> = []
+    var map2D:Array<Array<Int>> = []
+    var visited:Array<Array<Int>> = []
+    
+    convenience init(map:Array<Int>, map2D:Array<Array<Int>>) {
+        self.init()
+        self.map = map
+        self.map2D = map2D
+        
+        self.visited = self.map2D.map({row in
+            return row.map({ _ in
+                return 0
+            })
+        })
+    }
     
     func resetVisited() {
         // also the step counter
@@ -108,7 +101,7 @@ class FloodFill {
     }
     
     func floodFill(row:Int, col:Int, step:Int, teamPosition:MazeLocation){
-        print("checking: ", row, col)
+       
         if(isValidBlock(row: row, col: col) == false){     //Base case
             return
         }
@@ -125,18 +118,12 @@ class FloodFill {
         //}
         
         let distance = PointManhattanDistance(from: MazeLocation(row: row, col: col), to: teamPosition)
-        print("Distance: ", distance)
+        
         if(distance == step){
-            
-            print("adding one for step counter: ", stepCounter)
             //Current node is marked as visited.
             // check if path contains valid number of steps, we use DFS for this
-            
             visited[row][col] = 2;
-            
             stepCounter = 0
-            
-            print("same as step this is the solution: ",row, col)
         }
         
         floodFill(row: row-1, col: col, step: step, teamPosition: teamPosition);

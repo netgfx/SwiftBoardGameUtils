@@ -35,9 +35,15 @@ struct ContentView: View {
         [1, 1, 1, 1, 1, 1, 1, 1]
     ]
     
+    var floodFill:FloodFill!
+    
+    init() {
+        floodFill = FloodFill(map: map, map2D: map2D)
+    }
+     
+    
     func getNum(index:Int, innerIndex:Int) -> Int{
         let index = index*8+innerIndex
-        print(index)
         return map[index]
     }
     
@@ -73,9 +79,9 @@ struct ContentView: View {
     }
     
     func findLegalMoves(step:Int) {
-        let floodFill = FloodFill()
         // reset array of allowed blocks
         self.pathTiles.removeAll()
+        self.floodFill.resetVisited()
         
         for index in 0..<map2D.count {
             for innerIndex in 0..<map2D[index].count {
@@ -83,7 +89,7 @@ struct ContentView: View {
             }
         }
         // all allowed moves
-        let visited = floodFill.getVisited()
+        let visited = self.floodFill.getVisited()
         
         // now check if they are valid
         for index in 0..<visited.count {
