@@ -71,11 +71,22 @@ struct ContentView: View {
         
         return color
     }
+    func calculateTime(block : (() -> Void)) {
+            let start = DispatchTime.now()
+            block()
+            let end = DispatchTime.now()
+            let nanoTime = end.uptimeNanoseconds - start.uptimeNanoseconds
+            let timeInterval = Double(nanoTime) / 1_000_000_000
+            print("Time: \(timeInterval) seconds")
+        }
     
     func getPath(endPath:MazeLocation) {
         self.pathTiles.removeAll()
-        let path = BFS().findPath(start:MazeLocation(row: 0,col:0), end:MazeLocation(row:endPath.row,col:endPath.col))
-        self.pathTiles = path
+        calculateTime {
+            let path = BFS().findPath(start:MazeLocation(row: 0,col:0), end:MazeLocation(row:endPath.row,col:endPath.col))
+            self.pathTiles = path
+        }
+        
     }
     
     func findLegalMoves(step:Int) {
